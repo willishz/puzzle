@@ -18,14 +18,21 @@ import java.util.List;
 public final class Cryptography {
 
     public static void main(String[] args) throws JsonProcessingException {
-        System.out.println(EnWordCheckers.isCorrect("speling"));
-        String crpyt = "4 16 15 8 19 2 21 22 13 2 21 10 16 15";
+        String crpyt = null;
+//        crpyt = "speling";
+//        System.out.println(EnWordCheckers.isCorrect(crpyt));
+//        crpyt = "4 16 15 8 19 2 21 22 13 2 21 10 16 15";
 //        crpyt = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26";
-        System.out.println(objectMapper.writeValueAsString(Cryptography.alphabet(crpyt, true)));
+//        System.out.println(objectMapper.writeValueAsString(Cryptography.alphabet(crpyt, true)));
+//        crpyt = "2-3 3-3 1-1 4-3 3-5 2-4 4-2 4-4 3-4 3-2 4-5 4-5";
+//        System.out.println(objectMapper.writeValueAsString(Cryptography.polybius(crpyt)));
+        crpyt = "1627384950";
+        System.out.println(objectMapper.writeValueAsString(Cryptography.railFence(crpyt)));
     }
 
     /**
      * numberic to alphabet with offset
+     *
      * @param str
      * @return
      */
@@ -51,6 +58,19 @@ public final class Cryptography {
         return result;
     }
 
+    public static String[] polybius(String str) {
+        StringBuilder result1 = new StringBuilder();
+        StringBuilder result2 = new StringBuilder();
+        String[] cipher = Cryptography.smartSplit(str.replaceAll("-", ""));
+        for (String each : cipher) {
+            result1.append(POLYBIUS[Integer.parseInt(each.substring(0, 1)) - 1][Integer.parseInt(each.substring(1, 2)) - 1]);
+        }
+        for (String each : cipher) {
+            result2.append(POLYBIUS[Integer.parseInt(each.substring(1, 2)) - 1][Integer.parseInt(each.substring(0, 1)) - 1]);
+        }
+        return new String[]{result1.toString(), result2.toString()};
+    }
+
     public static String[] smartSplit(String str) {
         List<String> delimiter = Arrays.asList("\n", " ", "\t", "-", "_");
         for (String each : delimiter) {
@@ -60,6 +80,29 @@ public final class Cryptography {
         }
         return new String[]{str};
     }
+
+    public static List<String> railFence(String str) {
+        List<String> result = new ArrayList();
+        StringBuilder tmp = null;
+        for (int offset : new int[]{2, str.length() / 2}) {
+            tmp = new StringBuilder();
+            for (int loop = 0; loop < offset; loop++) {
+                for (int i = loop; i < str.length(); i += offset) {
+                    tmp.append(str.charAt(i));
+                }
+            }
+            result.add(tmp.toString());
+        }
+        return result;
+    }
+
+    public static char[][] POLYBIUS = new char[][]{
+            new char[]{'a', 'b', 'c', 'd', 'e'},
+            new char[]{'f', 'g', 'h', 'i', 'k'},
+            new char[]{'l', 'm', 'n', 'o', 'p'},
+            new char[]{'q', 'r', 's', 't', 'u'},
+            new char[]{'v', 'w', 'x', 'y', 'z'}
+    };
 
     public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
