@@ -24,20 +24,26 @@ public final class Cryptography {
 //        System.out.println(EnWordCheckers.isCorrect(crpyt));
 //        crpyt = "4 16 15 8 19 2 21 22 13 2 21 10 16 15";
 //        crpyt = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26";
-//        crpyt = "12 52 22 11 25 25 21 53 12 15 21 34";
+//        crpyt = "18 13 15 9 21 6 18 20";
 //        System.out.println(objectMapper.writeValueAsString(Cryptography.alphabet(crpyt, true)));
-        crpyt = "2-5 3-1 5-5 1-1 1-5 2-2 5-1 4-2";
-        System.out.println(objectMapper.writeValueAsString(Cryptography.polybius(crpyt)));
+//        crpyt = "2-5 3-1 5-5 1-1 1-5 2-2 5-1 4-2";
+//        System.out.println(objectMapper.writeValueAsString(Cryptography.polybius(crpyt)));
 //        crpyt = "1627384950";
 //        crpyt = "bwgakkfxbefo";
 //        crpyt = "fkgawwbpf";
-//        crpyt = "sucgwrosfubkbwkegffaxo";
+        crpyt = "rbmporit";
 //        System.out.println(objectMapper.writeValueAsString(Cryptography.railFence(crpyt)));
-//        System.out.println(objectMapper.writeValueAsString(Cryptography.caesar(crpyt, true)));
+        System.out.println(objectMapper.writeValueAsString(Cryptography.caesar(crpyt, true)));
 //        crpyt = "tuilishe";
 //        System.out.println(objectMapper.writeValueAsString(Cryptography.pinyin(crpyt)));
-//        crpyt = "vxfjzurvixeneznhjiidar";
+//        crpyt = "fnbhfxifytbkbwkegffaxo";
 //        System.out.println(objectMapper.writeValueAsString(Cryptography.vigenere(crpyt, "key Word")));
+
+//        System.out.println(Cryptography.reverse(crpyt));
+    }
+
+    private static String reverse(String crpyt) {
+        return new StringBuffer(crpyt).reverse().toString();
     }
 
     /**
@@ -47,9 +53,10 @@ public final class Cryptography {
      * @return
      */
     public static List<String> alphabet(String str, boolean check) {
+        str = str.trim().toLowerCase();
         List<String> result = new ArrayList();
         StringBuilder tmp = null;
-        for (int offset = -25; offset <= 25; offset++) {
+        for (int offset = -12; offset <= 13; offset++) {
             tmp = new StringBuilder();
             for (String each : Cryptography.smartSplit(str)) {
                 char c = (char) (Integer.parseInt(each) + offset + 96); // a-z 97-122
@@ -61,7 +68,7 @@ public final class Cryptography {
                 tmp.append(c);
             }
             if (check) {
-                tmp.append(" " + wordCheck(tmp.toString()));
+                tmp.append(" " + offset + " " + wordCheck(tmp.toString()));
             }
             result.add(tmp.toString());
         }
@@ -84,7 +91,7 @@ public final class Cryptography {
                 tmp.append(c);
             }
             if (check) {
-                tmp.append(" " + wordCheck(tmp.toString()));
+                tmp.append(" " + offset + " " + wordCheck(tmp.toString()));
             }
             result.add(tmp.toString());
         }
